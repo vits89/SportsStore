@@ -5,7 +5,7 @@
   "devDependencies": {
     "gulp": "3.9.1",
     "bootstrap": "4.0.0",
-    "jquery": "3.3.1",
+    "jquery": "3.4.1",
     "jquery-validation": "1.17.0",
     "jquery-validation-unobtrusive": "3.2.8",
     "popper.js": "1.14.1",
