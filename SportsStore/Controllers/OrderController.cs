@@ -1,55 +1,61 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models;
-using System.Linq;
 
 namespace SportsStore.Controllers
 {
     public class OrderController : Controller
     {
-        private IOrderRepository repository;
-        private Cart cart;
+        private readonly IOrderRepository _repository;
+        private readonly Cart _cart;
 
-        public OrderController(IOrderRepository repoService, Cart cartService)
+        public OrderController(IOrderRepository repository, Cart cart)
         {
-            repository = repoService;
-            cart = cartService;
+            _repository = repository;
+            _cart = cart;
         }
 
         [Authorize]
-        public ViewResult List() => View(repository.Orders.Where(o => !o.Shipped));
+        public ActionResult List()
+        {
+            return View(_repository.Orders.Where(o => !o.Shipped));
+        }
 
         [HttpPost]
         [Authorize]
-        public IActionResult MarkShipped(int orderID)
+        public ActionResult MarkShipped(int orderId)
         {
-            Order order = repository.Orders.FirstOrDefault(o => o.OrderID == orderID);
+            var order = _repository.Orders.FirstOrDefault(o => o.OrderID == orderId);
 
             if (order != null)
             {
                 order.Shipped = true;
 
-                repository.SaveOrder(order);
+                _repository.SaveOrder(order);
             }
 
             return RedirectToAction(nameof(List));
         }
 
-        public ViewResult Checkout() => View(new Order());
+        public ActionResult Checkout()
+        {
+            return View(new Order());
+        }
 
         [HttpPost]
-        public IActionResult Checkout(Order order)
+        public ActionResult Checkout(Order order)
         {
-            if (cart.Lines.Count() == 0)
+            if (_cart.Lines.Count() == 0)
             {
-                ModelState.AddModelError("", "Sorry, your cart is empty!");
+                ModelState.AddModelError(key: string.Empty, "Sorry, your cart is empty!");
             }
 
             if (ModelState.IsValid)
             {
-                order.Lines = cart.Lines.ToArray();
+                order.Lines = _cart.Lines.ToArray();
 
-                repository.SaveOrder(order);
+                _repository.SaveOrder(order);
 
                 return RedirectToAction(nameof(Completed));
             }
@@ -59,9 +65,9 @@ namespace SportsStore.Controllers
             }
         }
 
-        public ViewResult Completed()
+        public ActionResult Completed()
         {
-            cart.Clear();
+            _cart.Clear();
 
             return View();
         }

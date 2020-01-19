@@ -3,55 +3,61 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models;
-using SportsStore.Models.ViewModels;
+using SportsStore.ViewModels;
 
 namespace SportsStore.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AccountController(UserManager<IdentityUser> userMgr, SignInManager<IdentityUser> signInMgr)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
-            userManager = userMgr;
-            signInManager = signInMgr;
+            _userManager = userManager;
+            _signInManager = signInManager;
 
-            IdentitySeedData.EnsurePopulated(userMgr).Wait();
+            SeedIdentityData.EnsurePopulated(userManager).Wait();
         }
 
         [AllowAnonymous]
-        public ViewResult Login(string returnUrl) => View(new LoginModel { ReturnUrl = returnUrl });
+        public ActionResult Login(string returnUrl)
+        {
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<ActionResult> Login(LoginViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = await userManager.FindByNameAsync(loginModel.Name);
+                var user = await _userManager.FindByNameAsync(viewModel.UserName);
 
                 if (user != null)
                 {
-                    await signInManager.SignOutAsync();
+                    await _signInManager.SignOutAsync();
 
-                    if ((await signInManager.PasswordSignInAsync(user, loginModel.Password, false, false)).Succeeded)
+                    var signInResult = await _signInManager.PasswordSignInAsync(user, viewModel.Password,
+                        isPersistent: false, lockoutOnFailure: false);
+
+                    if (signInResult.Succeeded)
                     {
-                        return Redirect(loginModel?.ReturnUrl ?? "/Admin/Index");
+                        return Redirect(viewModel?.ReturnUrl ?? "/Admin/Index");
                     }
                 }
             }
 
-            ModelState.AddModelError("", "Invalid name or password");
+            ModelState.AddModelError(key: string.Empty, "Invalid user name or password");
 
-            return View(loginModel);
+            return View(viewModel);
         }
 
-        public async Task<RedirectResult> Logout(string returnUrl = "/")
+        public async Task<ActionResult> Logout(string returnUrl = "/")
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
 
             return Redirect(returnUrl);
         }

@@ -1,9 +1,10 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>@ViewBag.Title</title>
-    <link rel="stylesheet" asp-href-include="~/lib/bootstrap/dist/css/*.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <style>
         .input-validation-error {
             background-color: #fee;
@@ -12,24 +13,26 @@
     </style>
 </head>
 
-<body class="m-1 p-1">
-    <div class="bg-info p-2 row">
-        <div class="col">
-            <h4>@ViewBag.Title</h4>
-        </div>
-        <div class="col-2">
-            <a class="btn btn-sm btn-primary" asp-action="Logout" asp-controller="Account">Log Out</a>
-        </div>
+<body>
+    <div class="navbar navbar-dark bg-info mb-3" role="navigation">
+        <a class="navbar-brand text-uppercase" href="#">Sports Store Administration</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="float-right">
+                <a class="btn btn-primary btn-sm" asp-action="Logout" asp-controller="Account">Log out</a>
+            </div>
+        }
     </div>
-    @if (TempData["message"] != null)
-    {
-        <div class="alert alert-success">@TempData["message"]</div>
-    }
-    @RenderBody()
+    <div class="container-xl">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">@TempData["message"]</div>
+        }
+        @RenderBody()
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

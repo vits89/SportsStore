@@ -1,32 +1,33 @@
 ﻿@model Product
 @{
-    ViewBag.Title = "Edit Product";
+    ViewBag.Title ??= "Edit product";
     Layout = "_AdminLayout";
 }
-<form asp-action="Edit" method="post">
+
+<form method="post" asp-action="Edit">
     <input type="hidden" asp-for="ProductID" />
     <div class="form-group">
         <label asp-for="Name"></label>
-        <div><span asp-validation-for="Name" class="text-danger"></span></div>
-        <input asp-for="Name" class="form-control" />
+        <div><span class="text-danger" asp-validation-for="Name"></span></div>
+        <input class="form-control" asp-for="Name" />
     </div>
     <div class="form-group">
         <label asp-for="Description"></label>
-        <div><span asp-validation-for="Description" class="text-danger"></span></div>
-        <textarea asp-for="Description" class="form-control"></textarea>
+        <div><span class="text-danger" asp-validation-for="Description"></span></div>
+        <textarea class="form-control" asp-for="Description"></textarea>
     </div>
     <div class="form-group">
         <label asp-for="Category"></label>
-        <div><span asp-validation-for="Category" class="text-danger"></span></div>
-        <input asp-for="Category" class="form-control" />
+        <div><span class="text-danger" asp-validation-for="Category"></span></div>
+        <input class="form-control" asp-for="Category" />
     </div>
     <div class="form-group">
         <label asp-for="Price"></label>
-        <div><span asp-validation-for="Price" class="text-danger"></span></div>
-        <input asp-for="Price" class="form-control" />
+        <div><span class="text-danger" asp-validation-for="Price"></span></div>
+        <input class="form-control" asp-for="Price" />
     </div>
-    <div class="text-center">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <div class="text-center mb-3">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
     </div>
 </form>

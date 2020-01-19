@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SportsStore.Models
 {
@@ -10,7 +10,7 @@ namespace SportsStore.Models
         public int OrderID { get; set; }
 
         [BindNever]
-        public ICollection<CartLine> Lines { get; set; }
+        public IEnumerable<CartLine> Lines { get; set; }
 
         [BindNever]
         public bool Shipped { get; set; }

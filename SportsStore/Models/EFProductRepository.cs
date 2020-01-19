@@ -4,46 +4,49 @@ namespace SportsStore.Models
 {
     public class EFProductRepository : IProductRepository
     {
-        private ApplicationDbContext context;
+        private readonly AppDbContext _dbContext;
 
-        public EFProductRepository(ApplicationDbContext ctx) => context = ctx;
+        public IQueryable<Product> Products => _dbContext.Products;
 
-        public IQueryable<Product> Products => context.Products;
+        public EFProductRepository(AppDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public void SaveProduct(Product product)
         {
-            if (product.ProductID == 0)
+            if (product.ProductID > 0)
             {
-                context.Products.Add(product);
+                var existingProduct = _dbContext.Products.FirstOrDefault(p => p.ProductID == product.ProductID);
+
+                if (existingProduct != null)
+                {
+                    existingProduct.Name = product.Name;
+                    existingProduct.Description = product.Description;
+                    existingProduct.Price = product.Price;
+                    existingProduct.Category = product.Category;
+                }
             }
             else
             {
-                Product dbEntry = context.Products.FirstOrDefault(p => p.ProductID == product.ProductID);
-
-                if (dbEntry != null)
-                {
-                    dbEntry.Name = product.Name;
-                    dbEntry.Description = product.Description;
-                    dbEntry.Price = product.Price;
-                    dbEntry.Category = product.Category;
-                }
+                _dbContext.Products.Add(product);
             }
 
-            context.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
-        public Product DeleteProduct(int productID)
+        public Product DeleteProduct(int productId)
         {
-            Product dbEntry = context.Products.FirstOrDefault(p => p.ProductID == productID);
+            var product = _dbContext.Products.FirstOrDefault(p => p.ProductID == productId);
 
-            if (dbEntry != null)
+            if (product != null)
             {
-                context.Products.Remove(dbEntry);
+                _dbContext.Products.Remove(product);
 
-                context.SaveChanges();
+                _dbContext.SaveChanges();
             }
 
-            return dbEntry;
+            return product;
         }
     }
 }

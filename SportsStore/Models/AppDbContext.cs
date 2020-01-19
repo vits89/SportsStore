@@ -2,11 +2,11 @@
 
 namespace SportsStore.Models
 {
-    public class ApplicationDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }

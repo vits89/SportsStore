@@ -1,4 +1,5 @@
-﻿@model CartIndexViewModel
+﻿@model CartViewModel
+
 <h2>Your cart</h2>
 <table class="table table-bordered table-striped">
     <thead>
@@ -18,10 +19,10 @@
                 <td class="text-right">@line.Product.Price.ToString("c")</td>
                 <td class="text-right">@((line.Quantity * line.Product.Price).ToString("c"))</td>
                 <td>
-                    <form asp-action="RemoveFromCart" method="post">
+                    <form method="post" asp-action="RemoveFromCart">
                         <input type="hidden" name="ProductID" value="@line.Product.ProductID" />
-                        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+                        <button class="btn btn-danger btn-sm" type="submit">Remove</button>
                     </form>
                 </td>
             </tr>
@@ -29,12 +30,12 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3" class="text-right">Total:</td>
+            <td class="text-right" colspan="3">Total:</td>
             <td class="text-right">@Model.Cart.ComputeTotalValue().ToString("c")</td>
         </tr>
     </tfoot>
 </table>
-<div class="text-center">
+<div class="text-center mb-3">
     <a class="btn btn-primary" href="@Model.ReturnUrl">Continue shopping</a>
     <a class="btn btn-primary" asp-action="Checkout" asp-controller="Order">Checkout</a>
 </div>

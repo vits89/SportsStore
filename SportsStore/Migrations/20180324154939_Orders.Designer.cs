@@ -10,7 +10,7 @@ using System;
 
 namespace SportsStore.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20180324154939_Orders")]
     partial class Orders
     {

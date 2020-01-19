@@ -1,20 +1,21 @@
-﻿@model LoginModel
+﻿@model LoginViewModel
 @{
-    ViewBag.Title = "Log In";
+    ViewBag.Title = "Log in";
     Layout = "_AdminLayout";
 }
-<div class="text-danger" asp-validation-summary="All"></div>
-<form asp-action="Login" asp-controller="Account" method="post">
+
+<form class="mx-auto" method="post" style="max-width: 330px;" asp-action="Login" asp-controller="Account">
     <input type="hidden" asp-for="ReturnUrl" />
+    <div class="text-danger" asp-validation-summary="All"></div>
     <div class="form-group">
-        <label asp-for="Name"></label>
-        <div><span asp-validation-for="Name" class="text-danger"></span></div>
-        <input asp-for="Name" class="form-control" />
+        <label asp-for="UserName"></label>
+        <div><span class="text-danger" asp-validation-for="UserName"></span></div>
+        <input class="form-control" asp-for="UserName" />
     </div>
     <div class="form-group">
         <label asp-for="Password"></label>
-        <div><span asp-validation-for="Password" class="text-danger"></span></div>
-        <input asp-for="Password" class="form-control" />
+        <div><span class="text-danger" asp-validation-for="Password"></span></div>
+        <input class="form-control" asp-for="Password" />
     </div>
-    <button class="btn btn-primary" type="submit">Log In</button>
+    <button class="btn btn-primary btn-block mb-3" type="submit">Log in</button>
 </form>

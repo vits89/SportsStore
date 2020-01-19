@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SportsStore.Models.ViewModels
+namespace SportsStore.ViewModels
 {
-    public class LoginModel
+    public class LoginViewModel
     {
         [Required]
-        public string Name { get; set; }
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
 
         [Required]
-        [UIHint("password")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         public string ReturnUrl { get; set; } = "/";

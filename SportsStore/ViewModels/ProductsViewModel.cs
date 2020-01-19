@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using SportsStore.Models;
 
-namespace SportsStore.Models.ViewModels
+namespace SportsStore.ViewModels
 {
-    public class ProductsListViewModel
+    public class ProductsViewModel
     {
         public IEnumerable<Product> Products { get; set; }
         public PagingInfo PagingInfo { get; set; }

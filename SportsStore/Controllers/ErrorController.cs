@@ -4,6 +4,9 @@ namespace SportsStore.Controllers
 {
     public class ErrorController : Controller
     {
-        public ViewResult Error() => View();
+        public ActionResult Error()
+        {
+            return View();
+        }
     }
 }

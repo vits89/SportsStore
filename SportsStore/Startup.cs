@@ -14,19 +14,26 @@ namespace SportsStore
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:SportsStoreProducts:ConnectionString"]));
-            services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration["Data:SportsStoreIdentity:ConnectionString"]));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SportsStore")));
+            services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SportsStoreIdentity")));
+
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
+
             services.AddTransient<IProductRepository, EFProductRepository>();
-            services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IOrderRepository, EFOrderRepository>();
+
+            services.AddScoped(sp => SessionCart.GetCart(sp));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddControllersWithViews();
             services.AddMemoryCache();
             services.AddSession();
@@ -44,11 +51,6 @@ namespace SportsStore
             {
                 app.UseExceptionHandler("/Error");
             }
-
-            /* app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            }); */
 
             app.UseStaticFiles();
             app.UseRouting();
@@ -87,9 +89,6 @@ namespace SportsStore
                     pattern: "{controller}/{action}/{id?}"
                 );
             });
-
-            // SeedData.EnsurePopulated(app);
-            // IdentitySeedData.EnsurePopulated(app);
         }
     }
 }

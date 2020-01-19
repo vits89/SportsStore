@@ -1,21 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using SportsStore.Infrastructure;
-using System;
 
 namespace SportsStore.Models
 {
     public class SessionCart : Cart
     {
+        private const string SESSION_KEY_NAME = "Cart";
+
         [JsonIgnore]
         public ISession Session { get; set; }
 
-        public static Cart GetCart(IServiceProvider services)
+        public static Cart GetCart(IServiceProvider serviceProvider)
         {
-            ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
+            var session = serviceProvider.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
 
-            SessionCart cart = session?.GetJson<SessionCart>("Cart") ?? new SessionCart();
+            var cart = session?.GetJson<SessionCart>(SESSION_KEY_NAME) ?? new SessionCart();
 
             cart.Session = session;
 
@@ -26,19 +28,21 @@ namespace SportsStore.Models
         {
             base.AddItem(product, quantity);
 
-            Session.SetJson("Cart", this);
+            Session.SetJson(SESSION_KEY_NAME, this);
         }
+
         public override void RemoveLine(Product product)
         {
             base.RemoveLine(product);
 
-            Session.SetJson("Cart", this);
+            Session.SetJson(SESSION_KEY_NAME, this);
         }
+
         public override void Clear()
         {
             base.Clear();
 
-            Session.Remove("Cart");
+            Session.Remove(SESSION_KEY_NAME);
         }
     }
 }

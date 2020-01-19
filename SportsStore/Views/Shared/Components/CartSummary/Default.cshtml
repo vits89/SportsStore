@@ -1,14 +1,14 @@
 ﻿@model Cart
+
 <div>
     @if (Model.Lines.Count() > 0)
     {
         <small class="navbar-text">
-            <b>Your cart:</b>
-            @Model.Lines.Sum(x => x.Quantity) item(s)
-            @Model.ComputeTotalValue().ToString("c")
+            <b>Your cart:</b> @Model.Lines.Sum(l => l.Quantity) item(s) @Model.ComputeTotalValue().ToString("c")
         </small>
     }
-    <a class="btn btn-sm btn-secondary navbar-btn" asp-controller="Cart" asp-action="Index" asp-route-returnurl="@ViewContext.HttpContext.Request.PathAndQuery()">
-        <i class="fa fa-shopping-cart"></i>
+    <a class="btn btn-secondary btn-sm" asp-action="Index" asp-controller="Cart"
+       asp-route-returnurl="@ViewContext.HttpContext.Request.PathAndQuery()">
+        <i class="fas fa-shopping-cart"></i>
     </a>
 </div>

@@ -1,31 +1,31 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>SportsStore</title>
-    <link rel="stylesheet" asp-href-include="~/lib/bootstrap/dist/css/*.min.css" />
-    <link rel="stylesheet" asp-href-include="~/lib/fontawesome/css/*.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Sports Store</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" asp-href-include="~/lib/@@fortawesome/fontawesome-free/css/*.min.css" />
 </head>
 
 <body>
-    <div class="navbar navbar-inverse bg-inverse" role="navigation">
+    <div class="navbar navbar-dark bg-dark mb-3" role="navigation">
+        <a class="navbar-brand text-uppercase" href="#">Sports Store</a>
+        <div class="float-right">
+            @await Component.InvokeAsync("CartSummary")
+        </div>
+    </div>
+    <div class="container-xl">
         <div class="row">
-            <a class="col navbar-brand" href="#">SPORTS STORE</a>
-            <div class="col-4 text-right">
-                @await Component.InvokeAsync("CartSummary")
+            <div class="col-3">
+                @await Component.InvokeAsync("NavigationMenu")
+            </div>
+            <div class="col-9">
+                @RenderBody()
             </div>
         </div>
     </div>
-    <div class="row m-1 p-1">
-        <div id="categories" class="col-3">
-            @await Component.InvokeAsync("NavigationMenu")
-        </div>
-        <div class="col-9">
-            @RenderBody()
-        </div>
-    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

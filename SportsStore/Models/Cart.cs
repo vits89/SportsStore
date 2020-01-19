@@ -5,25 +5,35 @@ namespace SportsStore.Models
 {
     public class Cart
     {
-        private List<CartLine> lineCollection = new List<CartLine>();
+        public List<CartLine> Lines { get; set; } = new List<CartLine>();
 
-        public virtual void AddItem(Product product, int quantity)
+        public virtual void AddItem(Product product, int quantity = 1)
         {
-            CartLine line = lineCollection.Where(p => p.Product.ProductID == product.ProductID).FirstOrDefault();
+            var line = Lines.Where(p => p.Product.ProductID == product.ProductID).FirstOrDefault();
 
-            if (line == null)
-            {
-                lineCollection.Add(new CartLine { Product = product, Quantity = quantity });
-            }
-            else
+            if (line != null)
             {
                 line.Quantity += quantity;
             }
+            else
+            {
+                Lines.Add(new CartLine { Product = product, Quantity = quantity });
+            }
         }
 
-        public virtual void RemoveLine(Product product) => lineCollection.RemoveAll(l => l.Product.ProductID == product.ProductID);
-        public virtual decimal ComputeTotalValue() => lineCollection.Sum(e => e.Product.Price * e.Quantity);
-        public virtual void Clear() => lineCollection.Clear();
-        public virtual IEnumerable<CartLine> Lines => lineCollection;
+        public virtual void RemoveLine(Product product)
+        {
+            Lines.RemoveAll(l => l.Product.ProductID == product.ProductID);
+        }
+
+        public virtual void Clear()
+        {
+            Lines.Clear();
+        }
+
+        public virtual decimal ComputeTotalValue()
+        {
+            return Lines.Sum(l => l.Product.Price * l.Quantity);
+        }
     }
 }

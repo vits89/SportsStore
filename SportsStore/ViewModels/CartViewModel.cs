@@ -1,6 +1,8 @@
-﻿namespace SportsStore.Models.ViewModels
+﻿using SportsStore.Models;
+
+namespace SportsStore.ViewModels
 {
-    public class CartIndexViewModel
+    public class CartViewModel
     {
         public Cart Cart { get; set; }
         public string ReturnUrl { get; set; }
