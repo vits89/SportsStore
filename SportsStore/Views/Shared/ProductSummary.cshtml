@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model ProductViewModel
 
 <div class="card mb-2">
     <h4 class="card-header">
@@ -8,8 +8,8 @@
         </span>
     </h4>
     <div class="card-body">
-        <form id="@Model.ProductID" method="post" asp-action="AddToCart" asp-controller="Cart">
-            <input type="hidden" asp-for="ProductID" />
+        <form method="post" asp-action="AddToCart" asp-controller="Cart">
+            <input type="hidden" name="productId" value="@Model.Id" />
             <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
             <span class="card-text">@Model.Description</span>
             <button type="submit" class="btn btn-success btn-sm float-right">Add to cart</button>

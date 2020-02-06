@@ -1,8 +1,8 @@
-﻿namespace SportsStore.Models
+﻿namespace SportsStore.ViewModels
 {
-    public class Product
+    public class ProductViewModel
     {
-        public int ProductID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }

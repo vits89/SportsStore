@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 using SportsStore.Models;
+using SportsStore.ViewModels;
 
 namespace SportsStore.Controllers
 {
@@ -9,27 +12,34 @@ namespace SportsStore.Controllers
     public class AdminController : Controller
     {
         private readonly IProductRepository _repository;
+        private readonly IMapper _mapper;
 
-        public AdminController(IProductRepository repository)
+        public AdminController(IProductRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public ActionResult Index()
         {
-            return View(_repository.Products);
+            return View(_mapper.Map<IEnumerable<ProductViewModel>>(_repository.Products));
         }
 
         public ActionResult Edit(int productId)
         {
-            return View(_repository.Products.FirstOrDefault(p => p.ProductID == productId));
+            var product = _repository.Products.FirstOrDefault(p => p.ProductID == productId);
+            var productVm = _mapper.Map<UpdateProductViewModel>(product);
+
+            return View(productVm);
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(UpdateProductViewModel productVm)
         {
             if (ModelState.IsValid)
             {
+                var product = _mapper.Map<Product>(productVm);
+
                 _repository.SaveProduct(product);
 
                 TempData["message"] = $"{product.Name} has been saved";
@@ -38,7 +48,7 @@ namespace SportsStore.Controllers
             }
             else
             {
-                return View(product);
+                return View(productVm);
             }
         }
 
@@ -46,7 +56,7 @@ namespace SportsStore.Controllers
         {
             ViewBag.Title = "Create product";
 
-            return View(nameof(Edit), new Product());
+            return View(nameof(Edit), new UpdateProductViewModel());
         }
 
         [HttpPost]

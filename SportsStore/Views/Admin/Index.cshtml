@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<ProductViewModel>
 @{
     ViewBag.Title = "All products";
     Layout = "_AdminLayout";
@@ -16,13 +16,13 @@
         @foreach (var product in Model)
         {
             <tr>
-                <td class="text-right">@product.ProductID</td>
+                <td class="text-right">@product.Id</td>
                 <td>@product.Name</td>
                 <td class="text-right">@product.Price.ToString("c")</td>
                 <td class="text-center">
                     <form method="post" asp-action="Delete">
-                        <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-productId="@product.ProductID">Edit</a>
-                        <input type="hidden" name="ProductID" value="@product.ProductID" />
+                        <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-productId="@product.Id">Edit</a>
+                        <input type="hidden" name="productId" value="@product.Id" />
                         <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                     </form>
                 </td>

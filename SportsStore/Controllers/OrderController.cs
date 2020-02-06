@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 using SportsStore.Models;
+using SportsStore.ViewModels;
 
 namespace SportsStore.Controllers
 {
@@ -9,17 +12,21 @@ namespace SportsStore.Controllers
     {
         private readonly IOrderRepository _repository;
         private readonly Cart _cart;
+        private readonly IMapper _mapper;
 
-        public OrderController(IOrderRepository repository, Cart cart)
+        public OrderController(IOrderRepository repository, Cart cart, IMapper mapper)
         {
             _repository = repository;
             _cart = cart;
+            _mapper = mapper;
         }
 
         [Authorize]
         public ActionResult List()
         {
-            return View(_repository.Orders.Where(o => !o.Shipped));
+            var orderVms = _mapper.Map<IEnumerable<OrderViewModel>>(_repository.Orders.Where(o => !o.Shipped));
+
+            return View(orderVms);
         }
 
         [HttpPost]
@@ -40,11 +47,11 @@ namespace SportsStore.Controllers
 
         public ActionResult Checkout()
         {
-            return View(new Order());
+            return View(new AddOrderViewModel());
         }
 
         [HttpPost]
-        public ActionResult Checkout(Order order)
+        public ActionResult Checkout(AddOrderViewModel orderVm)
         {
             if (_cart.Lines.Count() == 0)
             {
@@ -53,6 +60,8 @@ namespace SportsStore.Controllers
 
             if (ModelState.IsValid)
             {
+                var order = _mapper.Map<Order>(orderVm);
+
                 order.Lines = _cart.Lines.ToArray();
 
                 _repository.SaveOrder(order);
@@ -61,7 +70,7 @@ namespace SportsStore.Controllers
             }
             else
             {
-                return View(order);
+                return View(orderVm);
             }
         }
 

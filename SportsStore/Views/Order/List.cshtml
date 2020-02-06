@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Order>
+﻿@model IEnumerable<OrderViewModel>
 @{
     ViewBag.Title = "Orders";
     Layout = "_AdminLayout";
@@ -22,7 +22,7 @@
                 <th>Quantity</th>
                 <td>
                     <form method="post" asp-action="MarkShipped">
-                        <input type="hidden" name="OrderID" value="@order.OrderID" />
+                        <input type="hidden" name="orderId" value="@order.Id" />
                         <button class="btn btn-danger btn-sm" type="submit">Ship</button>
                     </form>
                 </td>
@@ -31,7 +31,7 @@
             {
                 <tr>
                     <td colspan="2"></td>
-                    <td>@line.Product.Name</td>
+                    <td>@line.Product</td>
                     <td>@line.Quantity</td>
                     <td></td>
                 </tr>

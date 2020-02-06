@@ -1,11 +1,11 @@
-﻿@model Product
+﻿@model UpdateProductViewModel
 @{
     ViewBag.Title ??= "Edit product";
     Layout = "_AdminLayout";
 }
 
 <form method="post" asp-action="Edit">
-    <input type="hidden" asp-for="ProductID" />
+    <input type="hidden" asp-for="Id" />
     <div class="form-group">
         <label asp-for="Name"></label>
         <div><span class="text-danger" asp-validation-for="Name"></span></div>
